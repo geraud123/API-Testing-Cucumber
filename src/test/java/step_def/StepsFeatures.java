@@ -9,6 +9,8 @@ import io.restassured.response.Response;
 import org.junit.Assert;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 
 public class StepsFeatures {
@@ -40,31 +42,43 @@ public class StepsFeatures {
         Assert.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
-    @And("The response contain the attribute {string} with the value {string}")
-    public void theResponseContainTheAttributeWithTheValue(String attribut, String exceptedValue) {
+    @And("The response contains the attribute {string} with the value {string}")
+    public void theResponseContainsTheAttributeWithTheValue(String attribut, String exceptedValue) {
         String attributeValue = jsonPath.get(attribut);
 
         Assert.assertNotNull(attributeValue);
         Assert.assertEquals(exceptedValue, attributeValue);
     }
 
-    @And("The response contain {int} books")
-    public void theResponseContainBooks(int exceptedQuantity) {
+    @And("The response contains {int} books")
+    public void theResponseContainsBooks(int exceptedQuantity) {
         int numberOfElements = jsonPath.getList("$").size();
 
         Assert.assertEquals(exceptedQuantity, numberOfElements);
     }
 
-    @And("The response contain {int} books with a parameter {string} equals to {string}")
-    public void theResponseContainBooksWithAParameterEqualsTo(int exceptedQuantity, String parameterName, String parameterValue) {
-        int numberOfElements = jsonPath.getList("findAll { it." + parameterName + " == '" + parameterValue + "' }").size();
+    @And("The response contains {int} books with a parameter {string} equals to {string}")
+    public void theResponseContainsBooksWithAParameterEqualsTo(int exceptedQuantity, String parameterName, String parameterValue) {
+        int numberOfElements = 0;
+        Object json = response.jsonPath().get("$");
+        int size = 0;
+
+        if (json instanceof List) {
+            List<Map<String, Object>> jsonResponse = (List<Map<String, Object>>) json;
+            numberOfElements = jsonPath.getList("findAll { it." + parameterName + " == '" + parameterValue + "' }").size();
+        } else if (json instanceof Map) {
+            Map<String, Object> jsonResponse = (Map<String, Object>) json;
+            if(jsonResponse.get(parameterName).equals(parameterValue)){
+                numberOfElements=1;
+            }
+        }
 
         Assert.assertEquals(exceptedQuantity, numberOfElements);
     }
 
     @And("The response contains {int} first books from the library")
     public void theResponseContainsFirstBooksFromTheLibrary(int limit) {
-        int numberOfElements = jsonPath.getList("myArray[0.." + (limit-1) + "]").size();
+        int numberOfElements = jsonPath.getList("myArray[0.." + (limit - 1) + "]").size();
 
         Assert.assertEquals(limit, numberOfElements);
     }
