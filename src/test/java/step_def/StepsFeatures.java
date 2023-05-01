@@ -54,16 +54,13 @@ public class StepsFeatures {
         Assert.assertEquals(exceptedQuantity, numberOfElements);
     }
 
-    @Given("The user open the URL with the path {string} with a parameter type = {string}")
-    public void theUserOpenTheURLWithThePathWithAParameterType(String path, String type) {
-        RestAssured.basePath = path;
-        response = RestAssured.given()
-                .when()
-                .get().prettyPeek()
-                .then()
-                .extract()
-                .response();
+    @And("The response contain {int} books with a parameter {string} equals to {string}")
+    public void theResponseContainBooksWithAParameterEqualsTo(int exceptedQuantity, String parameterName, String parameterValue) {
+        String content = response.getBody().asString();
+        JsonPath jsonPath = new JsonPath(content);
+        Assert.assertNotNull(jsonPath);
+        int numberOfElements  = jsonPath.getList("findAll { it."+parameterName+" == '"+parameterValue+"' }").size();
 
-        Assert.assertNotNull(response);
+        Assert.assertEquals(exceptedQuantity, numberOfElements);
     }
 }

@@ -11,7 +11,6 @@ Feature: Simple Books API Testing
     And The response contain 6 books
 
   Scenario: Returns a list of books with type non-fiction
-    Given The user open the URL with the path "/books" with a parameter type = "non-fiction"
+    Given The user open the URL with the path "/books"
     Then API return the response with status code as 200
-    And The response contain 2 books
-
+    And The response contain 2 books with a parameter "type" equals to "non-fiction"
