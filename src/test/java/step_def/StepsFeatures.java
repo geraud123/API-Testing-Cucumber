@@ -7,6 +7,7 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Assert;
+
 import java.net.URL;
 
 
@@ -49,7 +50,7 @@ public class StepsFeatures {
         String content = response.getBody().asString();
         JsonPath jsonPath = new JsonPath(content);
         Assert.assertNotNull(jsonPath);
-        int numberOfElements  = jsonPath.getList("$").size();
+        int numberOfElements = jsonPath.getList("$").size();
 
         Assert.assertEquals(exceptedQuantity, numberOfElements);
     }
@@ -59,8 +60,18 @@ public class StepsFeatures {
         String content = response.getBody().asString();
         JsonPath jsonPath = new JsonPath(content);
         Assert.assertNotNull(jsonPath);
-        int numberOfElements  = jsonPath.getList("findAll { it."+parameterName+" == '"+parameterValue+"' }").size();
+        int numberOfElements = jsonPath.getList("findAll { it." + parameterName + " == '" + parameterValue + "' }").size();
 
         Assert.assertEquals(exceptedQuantity, numberOfElements);
+    }
+
+    @And("The response contains {int} first books from the library")
+    public void theResponseContainsFirstBooksFromTheLibrary(int limit) {
+        String content = response.getBody().asString();
+        JsonPath jsonPath = new JsonPath(content);
+        Assert.assertNotNull(jsonPath);
+        int numberOfElements = jsonPath.getList("myArray[0.." + (limit-1) + "]").size();
+
+        Assert.assertEquals(limit, numberOfElements);
     }
 }

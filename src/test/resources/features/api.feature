@@ -14,3 +14,8 @@ Feature: Simple Books API Testing
     Given The user open the URL with the path "/books"
     Then API return the response with status code as 200
     And The response contain 2 books with a parameter "type" equals to "non-fiction"
+
+  Scenario: Returns a list of books with limit 4
+    Given The user open the URL with the path "/books"
+    Then API return the response with status code as 200
+    And The response contains 4 first books from the library
