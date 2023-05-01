@@ -1,10 +1,17 @@
 Feature: Simple Books API Testing
 
-  Scenario Outline: Returns the status of the API.
-    Given The user open the "<URL>"
-    Then API return the response with status code as "200"
+  Scenario: Returns the status of the API
+    Given The user open the URL with the path "/status"
+    Then API return the response with status code as 200
+    And The response contain the attribut "status" with the value "OK"
 
-    Examples:
-      | URL                                |
-      | https://simple-books-api.glitch.me |
+  Scenario: Returns a list of books
+    Given The user open the URL with the path "/books"
+    Then API return the response with status code as 200
+    And The response contain 6 books
+
+  Scenario: Returns a list of books with type non-fiction
+    Given The user open the URL with the path "/books" with a parameter type = "non-fiction"
+    Then API return the response with status code as 200
+    And The response contain 2 books
 
