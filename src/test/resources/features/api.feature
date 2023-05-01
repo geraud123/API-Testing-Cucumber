@@ -3,7 +3,7 @@ Feature: Simple Books API Testing
   Scenario: Returns the status of the API
     Given The user open the URL with the path "/status"
     Then API return the response with status code as 200
-    And The response contain the attribut "status" with the value "OK"
+    And The response contain the attribute "status" with the value "OK"
 
   Scenario: Returns a list of books
     Given The user open the URL with the path "/books"
