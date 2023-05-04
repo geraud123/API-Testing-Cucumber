@@ -25,3 +25,40 @@ Feature: Simple Books API Testing
     Then API return the response with status code as 200
     And The response contains 1 books with a parameter "name" equals to "Just as I Am"
 
+  Scenario: API Authentication
+    Given The user open the URL with the path "/api-clients/" and the new user
+    Then API return the response with status code as 201
+    And The response contains the accessToken
+
+  Scenario: Submit an order
+    Given The user open the URL with the path "/orders" with the properties
+    Then API return the response with status code as 201
+    And The response contains the parameter "created" equals to "true"
+
+  Scenario: Get all orders
+    Given The user open the URL with the path "/orders" with the authorization
+    Then API return the response with status code as 200
+    And The response contains a not-empty list
+
+  Scenario: Get an order
+    Given The user open the URL with the path "/orders/" with the id
+    Then API return the response with status code as 200
+    And The response contains a order with the same id
+
+  Scenario: Update an order
+    Given The user open the URL with the path "/orders/" with the id and the new name "myName"
+    Then API return the response with status code as 204
+
+  Scenario: Get the modified order
+    Given The user open the URL with the path "/orders/" with the id
+    Then API return the response with status code as 200
+    And The response contains a order with the same id and the customerName equals "myName"
+
+  Scenario: Delete an order
+    Given The user open the URL with the path "/orders/" with the id for deleting
+    Then API return the response with status code as 204
+
+  Scenario: Get the deleted order
+    Given The user open the URL with the path "/orders/" with the id
+    Then API return the response with status code as 404
+    And The response contains error message
